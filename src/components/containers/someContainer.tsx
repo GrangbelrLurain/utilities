@@ -1,12 +1,12 @@
 import { memo, useState } from 'react';
 
-import SomePresentational from '../presentationals/somePresentational';
 import useUser from '@/hooks/useUser';
 import clsx from 'clsx';
+import SomePresentational from '../presentationals/somePresentational';
 
 const MemoizedSomePresentational = memo(SomePresentational);
 
-const SomeContainer = () => {
+function SomeContainer() {
   const { users, getUsers, isPending } = useUser();
 
   const [page, setPage] = useState(1);
@@ -22,12 +22,12 @@ const SomeContainer = () => {
         click {page}
       </button>
       <ul className="grid grid-cols-9 gap-4">
-        {users.map((user, index) => (
-          <MemoizedSomePresentational key={index} user={user} />
+        {users.map((user) => (
+          <MemoizedSomePresentational key={user.id} user={user} />
         ))}
       </ul>
     </div>
   );
-};
+}
 
 export default SomeContainer;

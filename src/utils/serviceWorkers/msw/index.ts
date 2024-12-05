@@ -6,7 +6,7 @@ const initMSW = async () => {
   }
 
   if (typeof window === "undefined") {
-    return;
+    
   } else {
     const { setupWorker } = await import("msw/browser");
 

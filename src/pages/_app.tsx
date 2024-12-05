@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <main className="grow">
           <Component {...pageProps} />
         </main>
-        <footer className="footer shrink-0"></footer>
+        <footer className="footer shrink-0" />
       </div>
       <nav className="drawer-side">
         <label
@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
           className="drawer-overlay"
         />
         <ul className="menu">
-          <li></li>
+          <li />
         </ul>
       </nav>
     </div>
