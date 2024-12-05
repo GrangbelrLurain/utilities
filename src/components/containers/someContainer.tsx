@@ -1,8 +1,8 @@
-import { memo, useState } from "react";
+import { memo, useState } from 'react';
 
-import SomePresentational from "../presentationals/somePresentational";
-import useUser from "@/hooks/useUser";
-import clsx from "clsx";
+import SomePresentational from '../presentationals/somePresentational';
+import useUser from '@/hooks/useUser';
+import clsx from 'clsx';
 
 const MemoizedSomePresentational = memo(SomePresentational);
 
@@ -13,13 +13,11 @@ const SomeContainer = () => {
 
   const handleClick = () => {
     setPage(page + 1);
-    getUsers({ limit: "10", page: page.toString() });
+    getUsers({ limit: '10', page: page.toString() });
   };
 
   return (
-    <div
-      className={clsx("pt-40 transition-opacity", isPending && "opacity-50")}
-    >
+    <div className={clsx('pt-40 transition-opacity', isPending && 'opacity-50')}>
       <button className="btn" onClick={handleClick}>
         click {page}
       </button>

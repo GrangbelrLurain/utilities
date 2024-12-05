@@ -1,9 +1,9 @@
-import { render } from "@testing-library/react";
-import { createMockUser } from "@/schemas/user";
+import { render } from '@testing-library/react';
+import { createMockUser } from '@/schemas/user';
 
-import SomePresentational from "./somePresentational";
+import SomePresentational from './somePresentational';
 
-test("데이터 랜더링 테스트", () => {
+test('데이터 랜더링 테스트', () => {
   const user = createMockUser(1);
 
   const { queryByText } = render(<SomePresentational user={user} />);
