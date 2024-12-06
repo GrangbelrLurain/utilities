@@ -8,9 +8,9 @@ regex="^\[(feat|fix|docs|style|refactor|test|chore|perf|ci|build)\] [a-zA-Z0-9]+
 
 # 커밋 메시지 검증
 if ! echo "$message" | grep -qE "$regex"; then
-    echo "❌ Commit message must match the format: [<type>] <scope>"
-    echo "Example: [feat] extensions"
+    echo "❌ 커밋 메세지는 [<type>] <scope> 형식이어야 합니다."
+    echo "VSCODE Extension Commit Message editor 사용 시 더 간편하게 사용하실 수 있습니다."
     exit 1
 fi
 
-echo "✅ Commit message is valid!"
+echo "✅ Commit message is valid!"a
