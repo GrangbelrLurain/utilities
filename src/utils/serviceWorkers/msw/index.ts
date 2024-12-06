@@ -1,14 +1,12 @@
-import { handlers as userHandlers } from "./handlers/user";
+import { handlers as userHandlers } from './handlers/user';
 
 const initMSW = async () => {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === 'production') {
     return;
   }
 
-  if (typeof window === "undefined") {
-    
-  } else {
-    const { setupWorker } = await import("msw/browser");
+  if (typeof window !== 'undefined') {
+    const { setupWorker } = await import('msw/browser');
 
     const handlers = [...userHandlers];
 

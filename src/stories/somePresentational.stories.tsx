@@ -1,9 +1,9 @@
-import "@/styles/globals.css";
+import '@/styles/globals.css';
 
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from '@storybook/react';
 
-import SomePresentational from "@/components/presentationals/somePresentational";
-import { createMockUser } from "@/schemas/user";
+import SomePresentational from '@/components/presentationals/somePresentational';
+import { createMockUser } from '@/schemas/user';
 
 const meta: Meta<typeof SomePresentational> = {
   component: SomePresentational,
@@ -11,7 +11,7 @@ const meta: Meta<typeof SomePresentational> = {
     nextjs: {
       appDirectory: true,
       navigation: {
-        segments: ["dashboard", "analytics"],
+        segments: ['dashboard', 'analytics'],
       },
     },
   },
@@ -25,7 +25,7 @@ type Story = StoryObj<typeof SomePresentational>;
 export const Example: Story = {
   parameters: {
     nextjs: {
-      pathname: "/",
+      pathname: '/',
     },
   },
 };

@@ -1,8 +1,8 @@
-import "@/styles/globals.css";
-import initMSW from "@/utils/serviceWorkers/msw";
-import type { AppProps } from "next/app";
-import { useEffect } from "react";
-import { MdMenu } from "react-icons/md";
+import '@/styles/globals.css';
+import initMSW from '@/utils/serviceWorkers/msw';
+import type { AppProps } from 'next/app';
+import { useEffect } from 'react';
+import { MdMenu } from 'react-icons/md';
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -26,11 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <footer className="footer shrink-0" />
       </div>
       <nav className="drawer-side">
-        <label
-          htmlFor="my-drawer"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        />
+        <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" />
         <ul className="menu">
           <li />
         </ul>

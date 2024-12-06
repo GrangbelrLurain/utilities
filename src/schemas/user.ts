@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { generateMock } from "@anatine/zod-mock";
+import { z } from 'zod';
+import { generateMock } from '@anatine/zod-mock';
 
 const userSchema = z.object({
   id: z.number(),
@@ -20,5 +20,4 @@ export const createUser = (user: User) => {
   return result.data;
 };
 
-export const createMockUser = (seed?: number) =>
-  generateMock(userSchema, { seed });
+export const createMockUser = (seed?: number) => generateMock(userSchema, { seed });

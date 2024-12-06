@@ -1,4 +1,5 @@
-import "@testing-library/jest-dom";
+import { jest } from '@jest/globals';
+import '@testing-library/jest-dom';
 
 window.matchMedia = (query) => ({
   matches: false,
@@ -10,7 +11,7 @@ window.matchMedia = (query) => ({
   addListener: jest.fn(),
   removeListener: jest.fn(),
 });
-Object.defineProperty(URL, "createObjectURL", {
+Object.defineProperty(URL, 'createObjectURL', {
   writable: true,
   value: jest.fn(),
 });

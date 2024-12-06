@@ -4,7 +4,7 @@ const nextConfig = {
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        "msw/node": false,
+        'msw/node': false,
       };
     }
     return config;

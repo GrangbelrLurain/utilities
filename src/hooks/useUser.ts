@@ -1,6 +1,6 @@
-import { TTestQuery } from "@/pages/api/user";
-import { userStore } from "@/stores/userStore";
-import { useCallback, useTransition } from "react";
+import { TTestQuery } from '@/pages/api/user';
+import { userStore } from '@/stores/userStore';
+import { useCallback, useTransition } from 'react';
 
 const useUser = () => {
   const { users, setUsers } = userStore();
@@ -17,7 +17,7 @@ const useUser = () => {
         setUsers(users.concat(...data));
       });
     },
-    [users]
+    [users, setUsers],
   );
 
   return { users, getUsers, isPending };

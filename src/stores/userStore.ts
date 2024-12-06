@@ -1,5 +1,5 @@
-import { User } from "@/schemas/user";
-import { create } from "zustand";
+import { User } from '@/schemas/user';
+import { create } from 'zustand';
 
 type TUserStore = {
   users: User[];

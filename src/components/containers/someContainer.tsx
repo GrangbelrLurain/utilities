@@ -18,7 +18,7 @@ function SomeContainer() {
 
   return (
     <div className={clsx('pt-40 transition-opacity', isPending && 'opacity-50')}>
-      <button className="btn" onClick={handleClick}>
+      <button className="btn" onClick={handleClick} type="button">
         click {page}
       </button>
       <ul className="grid grid-cols-9 gap-4">

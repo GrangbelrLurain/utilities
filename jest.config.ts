@@ -1,14 +1,14 @@
-import type { Config } from "jest";
+import type { Config } from 'jest';
 
 const config: Config = {
   transform: {
-    "^.+\\.(ts|js|tsx|jsx)$": "@swc/jest",
+    '^.+\\.(ts|js|tsx|jsx)$': '@swc/jest',
   },
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/jset.setup.js"],
-  modulePaths: ["<rootDir>/src/**/*.test.(ts|js|tsx|jsx)"],
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jset.setup.js'],
+  modulePaths: ['<rootDir>/src/**/*.test.(ts|js|tsx|jsx)'],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
 };
 
