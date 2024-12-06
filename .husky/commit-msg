@@ -1,3 +1,16 @@
 #!/usr/bin/env sh
- "$(dirname -- "$0")/_/husky.sh"
-npx --no -- commitlint --edit ${1}
+
+# 커밋 메시지 파일 경로
+message=$(cat "$1")
+
+# 정규식: [<type>] <scope> 형식
+regex="^\[(feat|fix|docs|style|refactor|test|chore|perf|ci|build)\] [a-zA-Z0-9]+$"
+
+# 커밋 메시지 검증
+if ! echo "$message" | grep -qE "$regex"; then
+    echo "❌ Commit message must match the format: [<type>] <scope>"
+    echo "Example: [feat] extensions"
+    exit 1
+fi
+
+echo "✅ Commit message is valid!"
