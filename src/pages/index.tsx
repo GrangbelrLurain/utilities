@@ -1,14 +1,24 @@
 import Link from 'next/link';
 export default function Home() {
   return (
-    <section className="flex flex-col pt-20">
-      <article className="flex flex-col gap-4 mx-auto max-w-screen-xl w-full">
-        <Link href="/json/compare" className="link-hover">
-          json 비교하기
-        </Link>
-        <Link href="/json/search-case" className="link-hover">
-          json key case 검사하기
-        </Link>
+    <section className="flex flex-col pt-20 gap-4">
+      <h1 className="mx-auto max-w-screen-xl text-2xl font-bold w-full text-primary border-b border-primary pb-4">
+        Utilities
+      </h1>
+      <h2 className="mx-auto max-w-screen-xl text-xl font-bold w-full">JSON</h2>
+      <article className="mx-auto max-w-screen-xl w-full">
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link href="/json/compare" className="link-hover">
+              json compare
+            </Link>
+          </li>
+          <li>
+            <Link href="/json/search-case" className="link-hover">
+              json key naming convention
+            </Link>
+          </li>
+        </ul>
       </article>
     </section>
   );

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { halloween } from 'daisyui/src/theming/themes';
 
 const config: Config = {
   content: [
@@ -13,6 +14,16 @@ const config: Config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+  },
+  daisyui: {
+    themes: [
+      'light',
+      {
+        dark: {
+          ...halloween,
+        },
+      },
+    ],
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('daisyui')],

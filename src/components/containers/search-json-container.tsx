@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ObjTextarea from '../presentationals/obj-differ/obj-textarea';
 import to from 'to-case';
-import { formatObjectLiteral } from '@/utils/text-format/obj-format';
+import ObjResult from '../presentationals/obj-differ/obj-result';
 
 const CASES = [
   'camel',
@@ -92,16 +92,7 @@ const SearchJsonContainer = () => {
       >
         찾기
       </button>
-      <div className="max-w-screen-md mx-auto mt-4">
-        <h3 className="font-bold mb-2">결과:</h3>
-        {findCases.length > 0 ? (
-          <p className="whitespace-pre-wrap">
-            {findCases.map((diff) => formatObjectLiteral(diff)).join('\n')}
-          </p>
-        ) : (
-          <p className="whitespace-pre-wrap">차이점이 없습니다.</p>
-        )}
-      </div>
+      <ObjResult values={findCases} />
     </section>
   );
 };

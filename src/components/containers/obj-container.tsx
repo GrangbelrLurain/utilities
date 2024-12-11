@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ObjTextarea from '../presentationals/obj-differ/obj-textarea';
-import { formatObjectLiteral } from '@/utils/text-format/obj-format';
+import ObjResult from '../presentationals/obj-differ/obj-result';
 
 const ObjContainer = () => {
   const [obj1, setObj1] = useState<string>('');
@@ -50,6 +50,9 @@ const ObjContainer = () => {
 
   return (
     <section className="flex flex-col gap-4 pt-10">
+      <article className="max-w-screen-xl flex flex-col gap-4 mx-auto w-full">
+        <h1 className="text-2xl font-bold">두 JSON 값을 비교합니다.</h1>
+      </article>
       <article className="max-w-screen-xl flex gap-4 mx-auto w-full">
         <div className="border border-gray-200 rounded-lg w-full h-full max-h-[80vh] overflow-y-auto">
           <ObjTextarea
@@ -72,16 +75,7 @@ const ObjContainer = () => {
       >
         비교하기
       </button>
-      <div className="max-w-screen-md mx-auto mt-4">
-        <h3 className="font-bold mb-2">차이점:</h3>
-        {differences.length > 0 ? (
-          <p className="whitespace-pre-wrap">
-            {differences.map((diff) => formatObjectLiteral(diff)).join('\n')}
-          </p>
-        ) : (
-          <p className="whitespace-pre-wrap">차이점이 없습니다.</p>
-        )}
-      </div>
+      <ObjResult values={differences} />
     </section>
   );
 };
