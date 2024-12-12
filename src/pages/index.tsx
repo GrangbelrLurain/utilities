@@ -20,6 +20,16 @@ export default function Home() {
           </li>
         </ul>
       </article>
+      <h2 className="mx-auto max-w-screen-xl text-xl font-bold w-full">URL</h2>
+      <article className="mx-auto max-w-screen-xl w-full">
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link href="/url/format-json" className="link-hover">
+              url to json
+            </Link>
+          </li>
+        </ul>
+      </article>
     </section>
   );
 }

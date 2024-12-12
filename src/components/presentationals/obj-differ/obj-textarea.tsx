@@ -1,10 +1,10 @@
 import { formatObjectLiteral } from '@/utils/text-format/obj-format';
 import clsx from 'clsx';
-import { ComponentPropsWithoutRef, useRef } from 'react';
+import { ComponentPropsWithoutRef, useEffect, useRef } from 'react';
 
 type TObjTextarea = ComponentPropsWithoutRef<'textarea'>;
 
-const ObjTextarea = ({ defaultValue, className, onChange, ...props }: TObjTextarea) => {
+const ObjTextarea = ({ defaultValue, value, className, onChange, ...props }: TObjTextarea) => {
   const objTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const autoResize = () => {
@@ -47,8 +47,13 @@ const ObjTextarea = ({ defaultValue, className, onChange, ...props }: TObjTextar
     autoResize();
   };
 
+  useEffect(() => {
+    autoResize();
+  }, [value]);
+
   return (
     <textarea
+      value={value}
       className={clsx('textarea', className)}
       defaultValue={defaultValue}
       onKeyDown={handleKeyDown}

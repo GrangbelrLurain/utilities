@@ -1,4 +1,4 @@
-import ObjContainer from '@/components/containers/obj-container';
+import ObjContainer from '@/components/containers/compare-json-container';
 
 const page = () => {
   return <ObjContainer />;

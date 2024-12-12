@@ -1,10 +1,10 @@
 import { formatObjectLiteral } from '@/utils/text-format/obj-format';
 
-type TObjResult = {
+type TResultStrings = {
   values: string[];
 };
 
-const ObjResult = ({ values }: TObjResult) => {
+const ResultStrings = ({ values }: TResultStrings) => {
   return (
     <div className="max-w-screen-xl mx-auto mt-4 border border-primary rounded-lg p-4 w-full">
       <h3 className="font-bold mb-2 text-primary">Result</h3>
@@ -19,4 +19,4 @@ const ObjResult = ({ values }: TObjResult) => {
   );
 };
 
-export default ObjResult;
+export default ResultStrings;

@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import ObjTextarea from '../presentationals/obj-differ/obj-textarea';
 import to from 'to-case';
-import ObjResult from '../presentationals/obj-differ/obj-result';
+import ResultStrings from '../presentationals/obj-differ/result-strings';
+import { compareObjKey } from '@/utils/compare/obj-compare';
+import ButtonBack from '../presentationals/buttons/button-back';
+import { useRouter } from 'next/router';
 
 const CASES = [
   'camel',
@@ -21,6 +24,8 @@ const CASES = [
 type TCase = (typeof CASES)[number];
 
 const SearchJsonContainer = () => {
+  const { back } = useRouter();
+
   const [obj1, setObj1] = useState<string>('');
 
   const [selectCase, setSelectCase] = useState<TCase>('camel');
@@ -30,31 +35,8 @@ const SearchJsonContainer = () => {
   const findCase = () => {
     try {
       const parsed = JSON.parse(obj1);
-      const matchingKeys = new Set<string>();
-
-      // 객체의 모든 key를 재귀적으로 검사하는 함수
-      const searchKeys = (obj: object) => {
-        if (typeof obj !== 'object' || obj === null) return;
-
-        Object.keys(obj).forEach((key) => {
-          // 현재 key의 case 확인
-          const keyCase = to(key);
-          if (keyCase === selectCase) {
-            matchingKeys.add(key);
-          }
-
-          // 값이 객체인 경우 재귀적으로 검사
-          if (
-            typeof obj[key as keyof typeof obj] === 'object' &&
-            obj[key as keyof typeof obj] !== null
-          ) {
-            searchKeys(obj[key as keyof typeof obj]);
-          }
-        });
-      };
-
-      searchKeys(parsed);
-      setFindCases(Array.from(matchingKeys));
+      const searchKeys = compareObjKey(parsed, selectCase, to);
+      setFindCases(searchKeys);
     } catch (error) {
       console.error('JSON 파싱 에러:', error);
       setFindCases([]);
@@ -63,6 +45,9 @@ const SearchJsonContainer = () => {
 
   return (
     <section className="flex flex-col gap-4 pt-10">
+      <article className="max-w-screen-xl flex gap-4 mx-auto w-full">
+        <ButtonBack onClick={back} />
+      </article>
       <article className="max-w-screen-xl flex flex-col gap-4 mx-auto w-full">
         <h1 className="text-2xl font-bold">JSON key값의 case를 검사합니다.</h1>
       </article>
@@ -92,7 +77,7 @@ const SearchJsonContainer = () => {
       >
         찾기
       </button>
-      <ObjResult values={findCases} />
+      <ResultStrings values={findCases} />
     </section>
   );
 };
