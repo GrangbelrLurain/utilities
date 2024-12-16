@@ -1,4 +1,4 @@
-import { formatObjectLiteral } from '@/utils/text-format/obj-format';
+import { formatObjectLiteral, parseObjectRecursive } from '@/utils/text-format/obj-format';
 import { useMemo } from 'react';
 import ObjTextarea from './obj-textarea';
 
@@ -9,8 +9,8 @@ type TResultObj = {
 const ResultObj = ({ value }: TResultObj) => {
   const valueFormatJSON = useMemo(() => {
     try {
-      console.log(JSON.stringify(value));
-      const formatValue = formatObjectLiteral(JSON.stringify(value));
+      const parsedValue = parseObjectRecursive(JSON.stringify(value));
+      const formatValue = formatObjectLiteral(JSON.stringify(parsedValue));
       return formatValue;
     } catch {
       return '잘못된 JSON 형식입니다.';

@@ -10,3 +10,19 @@ export const formatObjectLiteral = (value: string): string => {
     return value;
   }
 };
+
+export const parseObjectRecursive = (value: string) => {
+  try {
+    const parsedObj = JSON.parse(value);
+    Object.keys(parsedObj).forEach((key) => {
+      if (typeof parsedObj[key] === 'string') {
+        parsedObj[key] = parseObjectRecursive(parsedObj[key]);
+      } else if (typeof parsedObj[key] === 'object' && parsedObj[key] !== null) {
+        parsedObj[key] = parseObjectRecursive(JSON.stringify(parsedObj[key]));
+      }
+    });
+    return parsedObj;
+  } catch {
+    return value;
+  }
+};
