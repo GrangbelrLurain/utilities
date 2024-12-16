@@ -3,7 +3,7 @@ import ObjTextarea from '../presentationals/obj-differ/obj-textarea';
 import ResultStrings from '../presentationals/obj-differ/result-strings';
 import ButtonBack from '../presentationals/buttons/button-back';
 import { useRouter } from 'next/router';
-import { compareTwiceObj } from '@/utils/compare/obj-compare';
+import { compareTwiceObjRecursive } from '@/utils/compare/obj-compare';
 
 const ObjContainer = () => {
   const { back } = useRouter();
@@ -17,7 +17,14 @@ const ObjContainer = () => {
       const parsed1 = JSON.parse(obj1);
       const parsed2 = JSON.parse(obj2);
 
-      setDifferences(compareTwiceObj(parsed1, parsed2));
+      const diffs = compareTwiceObjRecursive(parsed1, parsed2);
+
+      const objectDiffs = diffs.reduce((acc, diff) => {
+        const parsedDiff = JSON.parse(diff);
+        return { ...acc, ...parsedDiff };
+      }, {});
+
+      setDifferences([JSON.stringify(objectDiffs)]);
     } catch {
       setDifferences(['유효하지 않은 JSON 형식입니다.']);
     }
