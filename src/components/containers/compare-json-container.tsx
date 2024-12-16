@@ -19,12 +19,7 @@ const ObjContainer = () => {
 
       const diffs = compareTwiceObjRecursive(parsed1, parsed2);
 
-      const objectDiffs = diffs.reduce((acc, diff) => {
-        const parsedDiff = JSON.parse(diff);
-        return { ...acc, ...parsedDiff };
-      }, {});
-
-      setDifferences([JSON.stringify(objectDiffs)]);
+      setDifferences([JSON.stringify(diffs)]);
     } catch {
       setDifferences(['유효하지 않은 JSON 형식입니다.']);
     }

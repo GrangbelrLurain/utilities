@@ -1,35 +1,29 @@
-export const compareTwiceObjRecursive = (obj1: object, obj2: object, path: string[] = []) => {
-  const diffs: string[] = [];
+export const compareTwiceObjRecursive = (obj1: object, obj2: object) => {
+  const diffs: Record<string, unknown> = {};
   const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
 
   allKeys.forEach((key) => {
-    let value1: unknown = obj1[key as keyof typeof obj1];
-    let value2: unknown = obj2[key as keyof typeof obj2];
-    const currentPath = [...path, key];
+    const value1: unknown = obj1[key as keyof typeof obj1];
+    const value2: unknown = obj2[key as keyof typeof obj2];
 
     // 한쪽이 undefined인 경우를 먼저 처리
     if (!value1 || !value2) {
-      const pathStr = currentPath.join('.');
-      diffs.push(
-        `{"${pathStr}": {"A": ${value1 ? JSON.stringify(value1) : 'null'}, "B": ${
-          value2 ? JSON.stringify(value2) : 'null'
-        }}}`,
-      );
-      return; // 현재 키에 대한 처리를 여기서 종료
+      diffs[key] = {
+        A: value1 || null,
+        B: value2 || null,
+      };
+      return;
     }
 
     // 배열을 객체로 변환하여 비교
     if (Array.isArray(value1) || Array.isArray(value2)) {
-      const arrayToObj = (arr: object[] | null) => {
-        if (!arr) return {};
-        return arr.reduce((obj: { [key: string]: object }, item, index) => {
-          obj[index] = item;
-          return obj;
-        }, {});
-      };
-
-      value1 = Array.isArray(value1) ? arrayToObj(value1) : value1;
-      value2 = Array.isArray(value2) ? arrayToObj(value2) : value2;
+      if (JSON.stringify(value1) !== JSON.stringify(value2)) {
+        diffs[key] = {
+          A: value1,
+          B: value2,
+        };
+      }
+      return;
     }
 
     // 둘 다 객체인 경우 재귀적으로 비교
@@ -39,14 +33,17 @@ export const compareTwiceObjRecursive = (obj1: object, obj2: object, path: strin
       typeof value2 === 'object' &&
       value2 !== null
     ) {
-      diffs.push(...compareTwiceObjRecursive(value1, value2, currentPath));
+      const nestedDiffs = compareTwiceObjRecursive(value1, value2);
+      if (Object.keys(nestedDiffs).length > 0) {
+        diffs[key] = nestedDiffs;
+      }
     }
     // 값이 다른 경우
     else if (JSON.stringify(value1) !== JSON.stringify(value2)) {
-      const pathStr = currentPath.join('.');
-      diffs.push(
-        `{"${pathStr}": {"A": ${JSON.stringify(value1)}, "B": ${JSON.stringify(value2)}}}`,
-      );
+      diffs[key] = {
+        A: value1,
+        B: value2,
+      };
     }
   });
 
