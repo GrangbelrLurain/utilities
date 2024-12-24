@@ -42,6 +42,7 @@
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "iconv-lite": "^0.6.3",
     "msw": "^2.6.6",
     "next": "15.0.3",
     "postcss-import": "^16.1.0",

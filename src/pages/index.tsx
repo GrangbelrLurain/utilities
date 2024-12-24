@@ -30,6 +30,21 @@ export default function Home() {
           </li>
         </ul>
       </article>
+      <h2 className="mx-auto max-w-screen-xl text-xl font-bold w-full">Translation</h2>
+      <article className="mx-auto max-w-screen-xl w-full">
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link href="/translation/encode" className="link-hover">
+              encode
+            </Link>
+          </li>
+          <li>
+            <Link href="/translation/decode" className="link-hover">
+              decode
+            </Link>
+          </li>
+        </ul>
+      </article>
     </section>
   );
 }
