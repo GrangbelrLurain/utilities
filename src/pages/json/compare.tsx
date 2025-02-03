@@ -1,7 +1,7 @@
 import ObjContainer from '@/components/containers/compare-json-container';
 
-const page = () => {
+const Page = () => {
   return <ObjContainer />;
 };
 
-export default page;
+export default Page;

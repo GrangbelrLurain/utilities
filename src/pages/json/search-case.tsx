@@ -1,7 +1,7 @@
 import SearchJsonContainer from '@/components/containers/search-json-container';
 
-const page = () => {
+const Page = () => {
   return <SearchJsonContainer />;
 };
 
-export default page;
+export default Page;
