@@ -1,4 +1,6 @@
+import ButtonBack from '@/components/presentationals/buttons/button-back';
 import ObjTextarea from '@/components/presentationals/obj-differ/obj-textarea';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 interface KeyStructure {
@@ -104,8 +106,8 @@ function downloadCSV(csvContent: string, filename: string = 'json-structure.csv'
 }
 
 const Page = () => {
+  const { back } = useRouter();
   const [jsonInput, setJsonInput] = useState('');
-  const [csvPreview, setCsvPreview] = useState('');
 
   // 사용 예시:
   const handleConvert = () => {
@@ -127,58 +129,49 @@ const Page = () => {
             .join(','),
         )
         .join('\n');
-      setCsvPreview(csvContent);
+      return csvContent;
     } catch (error) {
       console.error(error);
       alert('올바른 JSON 형식이 아닙니다.');
     }
   };
 
-  const handleDownload = () => {
-    if (!csvPreview) {
+  const handleDownload = (csvContent: string) => {
+    if (!csvContent) {
       alert('먼저 JSON을 변환해주세요.');
       return;
     }
-    downloadCSV(csvPreview);
+    downloadCSV(csvContent);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
-    setCsvPreview('');
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <div className="space-y-4 flex flex-col h-screen max-h-screen">
-        <div className="flex flex-col flex-shrink-0 h-0 flex-grow overflow-hidden">
-          <label className="block text-sm font-medium mb-2">JSON 입력</label>
-          <div className="overflow-y-auto">
-            <ObjTextarea
-              className="w-full border border-primary overflow-y-auto"
-              value={jsonInput}
-              onChange={handleChange}
-              placeholder="JSON을 입력하세요..."
-            />
-          </div>
+    <div className="flex flex-col pt-20 gap-4">
+      <article className="max-w-screen-xl flex gap-4 mx-auto w-full">
+        <ButtonBack onClick={back} />
+      </article>
+      <div className="max-w-screen-xl flex flex-col gap-4 mx-auto w-full">
+        <h1 className="text-2xl font-bold">JSON key값을 CSV로 변환합니다.</h1>
+        <label className="block text-sm font-medium mb-2">JSON 입력</label>
+        <div className="border border-gray-200 rounded-lg w-full h-full max-h-[80vh] overflow-y-auto">
+          <ObjTextarea
+            className="w-full h-full"
+            value={jsonInput}
+            onChange={handleChange}
+            placeholder="JSON을 입력하세요..."
+          />
         </div>
-
         <div className="flex space-x-2 flex-shrink">
           <button
-            onClick={handleConvert}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            변환
-          </button>
-          <button
-            onClick={handleDownload}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            disabled={!csvPreview}
+            onClick={() => handleDownload(handleConvert() || '')}
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80"
           >
             CSV 다운로드
           </button>
         </div>
-
-        <div>{csvPreview ? '변환 완료' : '변환 필요'}</div>
       </div>
     </div>
   );

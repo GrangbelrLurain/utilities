@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 export default function Home() {
   return (
     <section className="flex flex-col pt-20 gap-4">
