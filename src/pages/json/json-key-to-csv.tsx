@@ -7,6 +7,7 @@ import { MdCopyAll, MdDownload } from 'react-icons/md';
 interface KeyStructure {
   key: string;
   depth: number;
+  value?: string;
   children?: KeyStructure[];
 }
 
@@ -71,6 +72,11 @@ function parseJsonStructureRecursive(
       key: keyName,
       depth: parentKey ? parentKey.split('.').length : 0,
     };
+    if (value === null) {
+      structure.value = 'null';
+    } else if (typeof value !== 'object') {
+      structure.value = value as string;
+    }
 
     seenKeys.set(currentKey, structure);
 
@@ -88,12 +94,14 @@ function parseJsonStructureRecursive(
 
 function convertToRows(structure: KeyStructure[]): string[][] {
   const rows: string[][] = [];
+  const values: (string | undefined)[] = []; // value들을 따로 저장
 
   function processStructure(items: KeyStructure[]) {
     items.forEach((item) => {
       // depth만큼 빈 셀을 만들되, 마지막에 현재 키를 추가
       const row = new Array(item.depth).fill('').concat(item.key);
       rows.push(row);
+      values.push(item.value !== undefined ? String(item.value) : undefined);
 
       if (item.children) {
         processStructure(item.children);
@@ -102,6 +110,19 @@ function convertToRows(structure: KeyStructure[]): string[][] {
   }
 
   processStructure(structure);
+
+  const maxLength = Math.max(...rows.map((row) => row.length));
+  rows.forEach((row) => {
+    while (row.length < maxLength) {
+      row.push('');
+    }
+  });
+
+  // value 열 추가
+  rows.forEach((row, index) => {
+    row.push(values[index] || '');
+  });
+
   return rows;
 }
 
