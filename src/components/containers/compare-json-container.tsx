@@ -26,7 +26,7 @@ const ObjContainer = () => {
   };
 
   return (
-    <section className="flex flex-col gap-4 pt-10">
+    <section className="flex flex-col gap-4">
       <article className="max-w-screen-xl flex gap-4 mx-auto w-full">
         <ButtonBack onClick={back} />
       </article>

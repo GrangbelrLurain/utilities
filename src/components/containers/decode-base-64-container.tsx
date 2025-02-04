@@ -23,7 +23,7 @@ const EncodeBase64Container = () => {
     }
   };
   return (
-    <section className="flex flex-col gap-4 pt-10">
+    <section className="flex flex-col gap-4">
       <article className="mx-auto max-w-screen-xl w-full">
         <ButtonBack onClick={() => router.back()} />
       </article>

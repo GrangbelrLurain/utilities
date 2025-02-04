@@ -1,8 +1,7 @@
 import Link from 'next/link';
-
 export default function Home() {
   return (
-    <section className="flex flex-col pt-20 gap-4">
+    <section className="flex flex-col gap-4">
       <h1 className="mx-auto max-w-screen-xl text-2xl font-bold w-full text-primary border-b border-primary pb-4">
         Utilities
       </h1>

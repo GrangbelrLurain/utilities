@@ -189,7 +189,7 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col pt-20 gap-4">
+    <div className="flex flex-col gap-4">
       <article className="max-w-screen-xl flex gap-4 mx-auto w-full">
         <ButtonBack onClick={back} />
       </article>

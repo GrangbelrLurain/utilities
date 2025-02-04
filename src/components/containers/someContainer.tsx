@@ -17,7 +17,7 @@ function SomeContainer() {
   };
 
   return (
-    <div className={clsx('pt-40 transition-opacity', isPending && 'opacity-50')}>
+    <div className={clsx('transition-opacity', isPending && 'opacity-50')}>
       <button className="btn" onClick={handleClick} type="button">
         click {page}
       </button>
