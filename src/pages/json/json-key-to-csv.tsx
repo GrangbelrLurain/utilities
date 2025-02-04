@@ -68,7 +68,7 @@ function parseJsonStructureRecursive(
       if (Array.isArray(value)) {
         keyName = `${key}/*array*/`;
         if (typeof value[0] !== 'object') {
-          valueString = value.join(', ');
+          valueString = '"' + value.join(', ') + '"';
         }
       }
 
@@ -81,8 +81,13 @@ function parseJsonStructureRecursive(
       } else if (value === null) {
         structure.value = 'null';
       } else if (typeof value !== 'object') {
-        structure.value =
-          value || (typeof value === 'string' ? '""' : typeof value === 'number' ? '0' : 'false');
+        structure.value = value
+          ? '"' + value + '"'
+          : typeof value === 'string'
+            ? '""'
+            : typeof value === 'number'
+              ? '0'
+              : 'false';
       }
 
       seenKeys.set(currentKey, structure);
