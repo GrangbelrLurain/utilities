@@ -194,7 +194,7 @@ const Page = () => {
         <ButtonBack onClick={back} />
       </article>
       <div className="max-w-screen-xl flex flex-col gap-4 mx-auto w-full">
-        <h1 className="text-2xl font-bold">JSON to CSV</h1>
+        <h1 className="text-2xl font-bold">JSON key to CSV</h1>
         <label className="block text-sm font-medium mb-2">Please write JSON</label>
         <div className="border border-gray-200 rounded-lg w-full h-full max-h-[80vh] overflow-y-auto">
           <ObjTextarea
