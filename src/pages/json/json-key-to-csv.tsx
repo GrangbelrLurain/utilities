@@ -12,16 +12,16 @@ interface KeyStructure {
 }
 
 function parseJsonStructureRecursive(
-  obj: Record<string, unknown> | unknown[],
+  structureValue: unknown,
   parentKey = '',
   seenKeys = new Map<string, KeyStructure>(),
 ): KeyStructure[] {
   // 배열인 경우 처리
-  if (Array.isArray(obj)) {
+  if (Array.isArray(structureValue)) {
     const arrayKey = parentKey ? `${parentKey}/*array*/` : '/*array*/';
     const mergedResults: KeyStructure[] = [];
 
-    obj.forEach((item) => {
+    structureValue.forEach((item) => {
       if (item && typeof item === 'object') {
         const results = parseJsonStructureRecursive(
           item as Record<string, unknown>,
@@ -43,53 +43,63 @@ function parseJsonStructureRecursive(
     return mergedResults;
   }
 
-  // 객체인 경우 처리
-  return Object.entries(obj).flatMap(([key, value]) => {
-    const currentKey = parentKey ? `${parentKey}.${key}` : key;
+  if (typeof structureValue === 'object' && structureValue !== null) {
+    return Object.entries(structureValue).flatMap(([key, value]) => {
+      const currentKey = parentKey ? `${parentKey}.${key}` : key;
 
-    // 이미 본 키가 있는 경우, 해당 구조에 자식 노드 추가
-    if (seenKeys.has(currentKey)) {
-      const existingStructure = seenKeys.get(currentKey)!;
+      // 이미 본 키가 있는 경우, 해당 구조에 자식 노드 추가
+      if (seenKeys.has(currentKey)) {
+        const existingStructure = seenKeys.get(currentKey)!;
+        if (value && typeof value === 'object') {
+          const newChildren = parseJsonStructureRecursive(
+            value as Record<string, unknown>,
+            currentKey,
+            seenKeys,
+          );
+          existingStructure.children = existingStructure.children || [];
+          existingStructure.children.push(...newChildren);
+        }
+        return [];
+      }
+
+      let keyName = key;
+      let valueString = '';
+
+      if (Array.isArray(value)) {
+        keyName = `${key}/*array*/`;
+        if (typeof value[0] !== 'object') {
+          valueString = value.join(', ');
+        }
+      }
+
+      const structure: KeyStructure = {
+        key: keyName,
+        depth: parentKey ? parentKey.split('.').length : 0,
+      };
+      if (valueString) {
+        structure.value = valueString;
+      } else if (value === null) {
+        structure.value = 'null';
+      } else if (typeof value !== 'object') {
+        structure.value =
+          value || (typeof value === 'string' ? '""' : typeof value === 'number' ? '0' : 'false');
+      }
+
+      seenKeys.set(currentKey, structure);
+
       if (value && typeof value === 'object') {
-        const newChildren = parseJsonStructureRecursive(
+        structure.children = parseJsonStructureRecursive(
           value as Record<string, unknown>,
           currentKey,
           seenKeys,
         );
-        existingStructure.children = existingStructure.children || [];
-        existingStructure.children.push(...newChildren);
       }
-      return [];
-    }
 
-    let keyName = key;
+      return [structure];
+    });
+  }
 
-    if (Array.isArray(value)) {
-      keyName = `${key}/*array*/`;
-    }
-
-    const structure: KeyStructure = {
-      key: keyName,
-      depth: parentKey ? parentKey.split('.').length : 0,
-    };
-    if (value === null) {
-      structure.value = 'null';
-    } else if (typeof value !== 'object') {
-      structure.value = value as string;
-    }
-
-    seenKeys.set(currentKey, structure);
-
-    if (value && typeof value === 'object') {
-      structure.children = parseJsonStructureRecursive(
-        value as Record<string, unknown>,
-        currentKey,
-        seenKeys,
-      );
-    }
-
-    return [structure];
-  });
+  return [];
 }
 
 function convertToRows(structure: KeyStructure[]): string[][] {
