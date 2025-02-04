@@ -77,8 +77,14 @@ function parseJsonStructureRecursive(
         key: keyName,
         depth: parentKey ? parentKey.split('.').length : 0,
       };
-      if (value && typeof value !== 'object') {
-        structure.type = typeof value;
+      if (!(typeof value === 'object' && value === null) && !(typeof value === 'undefined')) {
+        if (typeof value === 'object') {
+          if (Array.isArray(value)) {
+            structure.type = 'array';
+          }
+        } else {
+          structure.type = typeof value;
+        }
       }
       if (valueString) {
         structure.value = valueString;
