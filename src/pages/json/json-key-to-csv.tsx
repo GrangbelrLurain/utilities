@@ -8,6 +8,7 @@ interface KeyStructure {
   key: string;
   depth: number;
   value?: string;
+  type?: string;
   children?: KeyStructure[];
 }
 
@@ -76,6 +77,9 @@ function parseJsonStructureRecursive(
         key: keyName,
         depth: parentKey ? parentKey.split('.').length : 0,
       };
+      if (value && typeof value !== 'object') {
+        structure.type = typeof value;
+      }
       if (valueString) {
         structure.value = valueString;
       } else if (value === null) {
@@ -117,13 +121,14 @@ function parseJsonStructureRecursive(
 function convertToRows(structure: KeyStructure[]): string[][] {
   const rows: string[][] = [];
   const values: (string | undefined)[] = []; // value들을 따로 저장
-
+  const types: (string | undefined)[] = []; // type들을 따로 저장
   function processStructure(items: KeyStructure[]) {
     items.forEach((item) => {
       // depth만큼 빈 셀을 만들되, 마지막에 현재 키를 추가
       const row = new Array(item.depth).fill('').concat(item.key);
       rows.push(row);
       values.push(item.value !== undefined ? String(item.value) : undefined);
+      types.push(item.type !== undefined ? String(item.type) : undefined);
 
       if (item.children) {
         processStructure(item.children);
@@ -140,9 +145,9 @@ function convertToRows(structure: KeyStructure[]): string[][] {
     }
   });
 
-  // value 열 추가
   rows.forEach((row, index) => {
     row.push(values[index] || '');
+    row.push(types[index] || '');
   });
 
   return rows;
