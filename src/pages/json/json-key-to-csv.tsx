@@ -204,6 +204,20 @@ const Page = () => {
             placeholder="JSON을 입력하세요..."
           />
         </div>
+        <div className="flex space-x-2 flex-shrink">
+          <button
+            onClick={() => handleCopy(handleConvert() || [[]])}
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80 flex items-center gap-2"
+          >
+            <MdCopyAll />
+          </button>
+          <button
+            onClick={() => handleDownload(handleConvert() || [[]])}
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80"
+          >
+            <MdDownload />
+          </button>
+        </div>
         {csvRows.length > 0 && (
           <>
             <label className="block text-sm font-medium mb-2">Preview</label>
@@ -229,20 +243,6 @@ const Page = () => {
             </div>
           </>
         )}
-        <div className="flex space-x-2 flex-shrink">
-          <button
-            onClick={() => handleCopy(handleConvert() || [[]])}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80 flex items-center gap-2"
-          >
-            <MdCopyAll />
-          </button>
-          <button
-            onClick={() => handleDownload(handleConvert() || [[]])}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/80"
-          >
-            <MdDownload />
-          </button>
-        </div>
       </div>
     </div>
   );
