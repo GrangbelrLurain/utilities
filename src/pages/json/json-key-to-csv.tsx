@@ -81,13 +81,20 @@ function parseJsonStructureRecursive(
       } else if (value === null) {
         structure.value = 'null';
       } else if (typeof value !== 'object') {
-        structure.value = value
-          ? '"' + value + '"'
-          : typeof value === 'string'
-            ? '""'
-            : typeof value === 'number'
-              ? '0'
-              : 'false';
+        switch (typeof value) {
+          case 'string':
+            structure.value = '"' + value + '"';
+            break;
+          case 'number':
+            structure.value = value.toString();
+            break;
+          case 'boolean':
+            structure.value = value.toString();
+            break;
+          default:
+            structure.value = '';
+            break;
+        }
       }
 
       seenKeys.set(currentKey, structure);
