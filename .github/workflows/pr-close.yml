@@ -6,6 +6,9 @@ jobs:
   close-issue:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -14,7 +17,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # \/ 를 사용하여 슬래시를 포함한 패턴 매칭
           ISSUE_NUMBER=$(echo "${{ github.event.pull_request.title }}" | grep -oE '\/\#[0-9]+' | tr -d '/#')
 
           if [ -z "$ISSUE_NUMBER" ]; then
