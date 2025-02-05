@@ -1,15 +1,23 @@
-name: PR Close Check
+name: Auto Close Issue on PR Merge
 on:
   pull_request:
     types: [closed]
 jobs:
-  close-job:
+  close-issue:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Check Issue Reference
+      - name: Extract and Close Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [[ ! "${{ github.event.pull_request.body }}" =~ (closes|fixes|resolves)\ #[0-9]+ ]]; then
-            echo "PR must reference an issue"
+          # PR 제목에서 이슈 번호 추출
+          ISSUE_NUMBER=$(echo "${{ github.event.pull_request.title }}" | grep -oE '#[0-9]+' | tr -d '#')
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "PR 제목에 이슈 번호가 없습니다."
             exit 1
           fi
+
+          # 이슈 종료
+          gh issue close $ISSUE_NUMBER --comment "PR #${{ github.event.pull_request.number }} 머지로 인해 자동 종료되었습니다." --reason completed
