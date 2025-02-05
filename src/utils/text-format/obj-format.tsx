@@ -35,38 +35,91 @@ export interface JSONStructure {
   children?: JSONStructure[];
 }
 
+// 상수로 구분자 정의
+const KEY_SEPARATOR = 'CELL_SEPARATOR';
+
+const KEY_ARRAY = '/*array*/';
+
 export const parseJSONToStructureRecursive = (
   structureValue: unknown,
   parentKey = '',
   seenMap = new Map<string, JSONStructure>(),
 ): JSONStructure[] => {
   if (typeof structureValue === 'object' && structureValue !== null) {
-    return Object.entries(structureValue).flatMap(([key, value]) => {
-      const isArray = Array.isArray(structureValue);
-      const nowKey = isArray ? '/*array*/' : key;
-      const currentKey = parentKey ? `${parentKey}.${nowKey}` : nowKey;
-
-      if (seenMap.has(currentKey)) {
-        return handleExistingKey(currentKey, value, seenMap);
-      }
-
-      const structure = createStructure(!parentKey && isArray ? nowKey : key, value, parentKey);
-      seenMap.set(currentKey, structure);
-
-      if (value && typeof value === 'object') {
-        const childResults = parseJSONToStructureRecursive(
-          value as Record<string, unknown>,
-          currentKey,
-          seenMap,
-        );
-        structure.children = childResults;
-      }
-
-      return [structure];
-    });
+    if (Array.isArray(structureValue)) {
+      return setArrayStructure(structureValue as unknown[], parentKey, seenMap);
+    }
+    return setObjectStructure(structureValue as Record<string, unknown>, parentKey, seenMap);
   }
 
   return [];
+};
+
+const arrayToString = (array: unknown[]): string => {
+  return `[${array
+    .map((item) => {
+      if (Array.isArray(item)) {
+        return arrayToString(item);
+      }
+      if (item && typeof item === 'object') {
+        return '[Object object]';
+      }
+      return formatPrimitiveValue(item);
+    })
+    .join(', ')}]`;
+};
+
+const setArrayStructure = (
+  array: unknown[],
+  parentKey: string,
+  seenMap: Map<string, JSONStructure>,
+): JSONStructure[] => {
+  const currentKey = parentKey ? `${parentKey}${KEY_SEPARATOR}${KEY_ARRAY}` : KEY_ARRAY;
+  if (seenMap.has(currentKey)) {
+    return handleExistingKey(currentKey, array, seenMap);
+  }
+
+  const structure = createStructure(KEY_ARRAY, array, parentKey);
+  seenMap.set(currentKey, structure);
+  structure.children = structure.children || [];
+
+  array.forEach((value) => {
+    if (value && typeof value === 'object') {
+      const childResults = parseJSONToStructureRecursive(value, currentKey, seenMap);
+      structure.children!.push(...(childResults || []));
+    }
+  });
+
+  return [structure];
+};
+
+const setObjectStructure = (
+  obj: Record<string, unknown>,
+  parentKey: string,
+  seenMap: Map<string, JSONStructure>,
+): JSONStructure[] => {
+  const isParentArray = Array.isArray(obj);
+
+  return Object.entries(obj).flatMap(([key, value]) => {
+    let currentKey = parentKey ? `${parentKey}${KEY_SEPARATOR}${key}` : key;
+    if (isParentArray) {
+      currentKey = `${parentKey}${KEY_SEPARATOR}${KEY_ARRAY}`;
+    }
+
+    if (seenMap.has(currentKey)) {
+      return handleExistingKey(currentKey, value, seenMap);
+    }
+
+    const structure = createStructure(isParentArray ? KEY_ARRAY : key, value, parentKey);
+    seenMap.set(currentKey, structure);
+
+    if (value && typeof value === 'object') {
+      const childResults = parseJSONToStructureRecursive(value, currentKey, seenMap);
+      structure.children = childResults;
+    }
+
+    return [structure];
+  });
 };
 
 const handleExistingKey = (
@@ -74,25 +127,26 @@ const handleExistingKey = (
   value: unknown,
   seenMap: Map<string, JSONStructure>,
 ): JSONStructure[] => {
-  const existingStructure = seenMap.get(currentKey)!;
-  if (value && typeof value === 'object') {
-    const newChildren = parseJSONToStructureRecursive(
-      value as Record<string, unknown>,
-      currentKey,
-      seenMap,
-    );
-    existingStructure.children = existingStructure.children || [];
-    newChildren.forEach((child) => {
-      existingStructure.children!.push(child);
-    });
+  const structure = seenMap.get(currentKey);
+  if (structure) {
+    if (typeof value === 'object') {
+      structure.children = structure.children || [];
+      structure.children.push(...parseJSONToStructureRecursive(value, currentKey, seenMap));
+    } else {
+      structure.value = structure.value + `, ${formatPrimitiveValue(value)}`;
+    }
+    if (!structure.type?.includes(switchType(value))) {
+      structure.type = structure.type + `, ${switchType(value)}`;
+    }
   }
+
   return [];
 };
 
 const createStructure = (key: string, value: unknown, parentKey: string): JSONStructure => {
   const structure: JSONStructure = {
     key,
-    depth: parentKey ? parentKey.split('.').length : 0,
+    depth: parentKey ? parentKey.split(KEY_SEPARATOR).length : 0,
   };
 
   setStructureType(structure, value);
@@ -101,22 +155,40 @@ const createStructure = (key: string, value: unknown, parentKey: string): JSONSt
   return structure;
 };
 
-const setStructureType = (structure: JSONStructure, value: unknown): void => {
-  if (!(typeof value === 'object' && value === null) && !(typeof value === 'undefined')) {
-    if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        structure.type = 'array';
-      }
-    } else {
-      structure.type = typeof value;
-    }
+const switchType = (value: unknown): string => {
+  if (!value) {
+    return '';
   }
+  if (Array.isArray(value)) {
+    const types = value.reduce((acc, item) => {
+      if (acc.includes(switchType(item))) {
+        return acc;
+      }
+      acc.push(switchType(item));
+      return acc;
+    }, []);
+    return 'Array<' + (types.length ? types.join(' | ') : 'unknown') + '>';
+  }
+  if (typeof value === 'object') {
+    return 'object';
+  }
+  return typeof value;
+};
+
+const setStructureType = (structure: JSONStructure, value: unknown): void => {
+  structure.type = switchType(value);
 };
 
 const setStructureValue = (structure: JSONStructure, value: unknown): void => {
-  if (Array.isArray(value) && value.some((item) => typeof item !== 'object')) {
+  if (
+    Array.isArray(value) &&
+    value.some((item) => typeof item !== 'object' || Array.isArray(item))
+  ) {
     structure.value = `[${value
       .map((item) => {
+        if (typeof item === 'object' && Array.isArray(item)) {
+          return arrayToString(item);
+        }
         if (typeof item !== 'object') {
           return formatPrimitiveValue(item);
         }
@@ -131,16 +203,10 @@ const setStructureValue = (structure: JSONStructure, value: unknown): void => {
 };
 
 const formatPrimitiveValue = (value: unknown): string => {
-  switch (typeof value) {
-    case 'string':
-      return `"${value}"`;
-    case 'number':
-      return value.toString();
-    case 'boolean':
-      return value.toString();
-    default:
-      return '';
-  }
+  if (value === null) return 'null';
+  if (value === undefined) return 'undefined';
+  if (typeof value === 'string') return `"${value}"`;
+  return String(value);
 };
 
 export const structureToRows = (structure: JSONStructure[]): string[][] => {
