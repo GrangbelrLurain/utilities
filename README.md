@@ -48,3 +48,31 @@ url을 json으로 변환합니다.
 ## 작업자
 - kim
 - shin
+
+## Commit & Branch Pattern
+### type
+- feat(기능 개발)
+- hotfix(버그 수정)
+- docs(문서 관련 수정)
+- style(코드 포맷팅 관련)
+- refactor(리팩토링)
+- chore(package.json, env 등)
+- build(빌드 관련 설정 수정)
+- deploy(Ci/Cd, Helm, Docker)
+- revert(원복)
+- test(테스트)
+
+
+### Branch Name
+- type/name/#issueNo
+- ex: feat/john/#123
+
+### Commit Message
+- [type/name] subject
+    <br/>
+    <br/>
+    markdown
+- ex: [feat/john] 로그인 기능 구현
+      <br/>
+      <br/>
+      로그인 기능 구현 상세
