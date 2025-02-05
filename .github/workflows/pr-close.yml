@@ -1,0 +1,15 @@
+name: PR Close Check
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  close-job:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Issue Reference
+        run: |
+          if [[ ! "${{ github.event.pull_request.body }}" =~ (closes|fixes|resolves)\ #[0-9]+ ]]; then
+            echo "PR must reference an issue"
+            exit 1
+          fi
