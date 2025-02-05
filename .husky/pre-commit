@@ -5,7 +5,7 @@
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 # 정규식: type/name/#issueNo 형식
-PATTERN="^(feat|bugfix|docs|style|refactor|chore|build|deploy|revert|test)/[a-zA-Z0-9_-]+/#[0-9]+$"
+PATTERN="^(feat|hotfix|docs|style|refactor|chore|build|deploy|revert|test)/[a-zA-Z0-9_-]+/#[0-9]+$"
 
 if [[ ! "$BRANCH_NAME" =~ $PATTERN ]]; then
   echo "❌ 브랜치 이름은 {type}/{name}/{#issueNo} 형식이어야 합니다."
