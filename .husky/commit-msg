@@ -1,16 +1,17 @@
 #!/usr/bin/env sh
 
 # 커밋 메시지 파일 경로
-message=$(cat "$1")
+message=$(head -n 1 "$1")
 
-# 정규식: [<type>] <scope> 형식
-regex="^\[(feat|fix|docs|style|refactor|test|chore|perf|ci|build)\] [a-zA-Z0-9]+$"
+# 정규식: {type}/{name}/#{issueNo}:{subject} 형식
+regex="^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)\/[a-zA-Z0-9]+\/#[0-9]+:.+$"
 
-# 커밋 메시지 검증
+# 첫 줄 커밋 메시지 검증
 if ! echo "$message" | grep -qE "$regex"; then
-    echo "❌ 커밋 메세지는 [<type>] <scope> 형식이어야 합니다."
-    echo "VSCODE Extension Commit Message editor 사용 시 더 간편하게 사용하실 수 있습니다."
+    echo "❌ 커밋 메세지는 {type}/{name}/#{issueNo}:{subject} 형식이어야 합니다."
+    echo "예시: feat/john/#123:로그인 기능 구현"
+    echo "type 목록: feat|fix|docs|style|refactor|test|chore|perf|ci|build"
     exit 1
 fi
 
-echo "✅ Commit message is valid!"a
+echo "✅ 커밋 메시지가 유효합니다!"
