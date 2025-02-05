@@ -40,73 +40,33 @@ export const parseJSONToStructureRecursive = (
   parentKey = '',
   seenMap = new Map<string, JSONStructure>(),
 ): JSONStructure[] => {
-  if (Array.isArray(structureValue)) {
-    return handleArrayValue(structureValue, parentKey, seenMap);
-  }
-
   if (typeof structureValue === 'object' && structureValue !== null) {
-    return handleObjectValue(structureValue as Record<string, unknown>, parentKey, seenMap);
+    return Object.entries(structureValue).flatMap(([key, value]) => {
+      const isArray = Array.isArray(structureValue);
+      const nowKey = isArray ? '/*array*/' : key;
+      const currentKey = parentKey ? `${parentKey}.${nowKey}` : nowKey;
+
+      if (seenMap.has(currentKey)) {
+        return handleExistingKey(currentKey, value, seenMap);
+      }
+
+      const structure = createStructure(!parentKey && isArray ? nowKey : key, value, parentKey);
+      seenMap.set(currentKey, structure);
+
+      if (value && typeof value === 'object') {
+        const childResults = parseJSONToStructureRecursive(
+          value as Record<string, unknown>,
+          currentKey,
+          seenMap,
+        );
+        structure.children = childResults;
+      }
+
+      return [structure];
+    });
   }
 
   return [];
-};
-
-const handleArrayValue = (
-  array: unknown[],
-  parentKey: string,
-  seenMap: Map<string, JSONStructure>,
-): JSONStructure[] => {
-  const arrayKey = parentKey ? `${parentKey}` : '/*array*/';
-  const mergedResults = new Map<string, JSONStructure>();
-
-  array.forEach((item) => {
-    if (item && typeof item === 'object') {
-      const results = parseJSONToStructureRecursive(
-        item as Record<string, unknown>,
-        arrayKey,
-        seenMap,
-      );
-      results.forEach((result) => {
-        mergedResults.set(result.key, result);
-      });
-    }
-  });
-
-  if (!parentKey) {
-    const structure = createStructure(arrayKey, array, parentKey);
-    structure.children = Array.from(mergedResults.values());
-    return [structure];
-  }
-
-  return Array.from(mergedResults.values());
-};
-
-const handleObjectValue = (
-  obj: Record<string, unknown>,
-  parentKey: string,
-  seenMap: Map<string, JSONStructure>,
-): JSONStructure[] => {
-  return Object.entries(obj).flatMap(([key, value]) => {
-    const currentKey = parentKey ? `${parentKey}.${key}` : key;
-
-    if (seenMap.has(currentKey)) {
-      return handleExistingKey(currentKey, value, seenMap);
-    }
-
-    const structure = createStructure(key, value, parentKey);
-    seenMap.set(currentKey, structure);
-
-    if (value && typeof value === 'object') {
-      const childResults = parseJSONToStructureRecursive(
-        value as Record<string, unknown>,
-        currentKey,
-        seenMap,
-      );
-      structure.children = childResults;
-    }
-
-    return [structure];
-  });
 };
 
 const handleExistingKey = (

@@ -14,6 +14,7 @@ const Page = () => {
     try {
       const jsonData = JSON.parse(jsonInput);
       const structure = parseJSONToStructureRecursive(jsonData);
+      console.log(structure);
       const rows = structureToRows(structure);
       setCsvRows(rows);
       return rows;
