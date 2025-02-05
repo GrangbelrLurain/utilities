@@ -1,163 +1,9 @@
 import ButtonBack from '@/components/presentationals/buttons/button-back';
 import ObjTextarea from '@/components/presentationals/obj-differ/obj-textarea';
+import { parseJSONToStructureRecursive, structureToRows } from '@/utils/text-format/obj-format';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdCopyAll, MdDownload } from 'react-icons/md';
-
-interface KeyStructure {
-  key: string;
-  depth: number;
-  value?: string;
-  type?: string;
-  children?: KeyStructure[];
-}
-
-function parseJsonStructureRecursive(
-  structureValue: unknown,
-  parentKey = '',
-  seenKeys = new Map<string, KeyStructure>(),
-): KeyStructure[] {
-  // 배열인 경우 처리
-  if (Array.isArray(structureValue)) {
-    const arrayKey = parentKey ? `${parentKey}/*array*/` : '/*array*/';
-    const mergedResults: KeyStructure[] = [];
-
-    structureValue.forEach((item) => {
-      if (item && typeof item === 'object') {
-        const results = parseJsonStructureRecursive(
-          item as Record<string, unknown>,
-          arrayKey,
-          seenKeys,
-        );
-        results.forEach((result) => {
-          const existingIndex = mergedResults.findIndex((r) => r.key === result.key);
-          if (existingIndex === -1) {
-            mergedResults.push(result);
-          } else if (result.children) {
-            mergedResults[existingIndex].children = mergedResults[existingIndex].children || [];
-            mergedResults[existingIndex].children!.push(...(result.children || []));
-          }
-        });
-      }
-    });
-
-    return mergedResults;
-  }
-
-  if (typeof structureValue === 'object' && structureValue !== null) {
-    return Object.entries(structureValue).flatMap(([key, value]) => {
-      const currentKey = parentKey ? `${parentKey}.${key}` : key;
-
-      // 이미 본 키가 있는 경우, 해당 구조에 자식 노드 추가
-      if (seenKeys.has(currentKey)) {
-        const existingStructure = seenKeys.get(currentKey)!;
-        if (value && typeof value === 'object') {
-          const newChildren = parseJsonStructureRecursive(
-            value as Record<string, unknown>,
-            currentKey,
-            seenKeys,
-          );
-          existingStructure.children = existingStructure.children || [];
-          existingStructure.children.push(...newChildren);
-        }
-        return [];
-      }
-
-      let keyName = key;
-      let valueString = '';
-
-      if (Array.isArray(value)) {
-        keyName = `${key}/*array*/`;
-        if (typeof value[0] !== 'object') {
-          valueString = '"' + value.join(', ') + '"';
-        }
-      }
-
-      const structure: KeyStructure = {
-        key: keyName,
-        depth: parentKey ? parentKey.split('.').length : 0,
-      };
-      if (!(typeof value === 'object' && value === null) && !(typeof value === 'undefined')) {
-        if (typeof value === 'object') {
-          if (Array.isArray(value)) {
-            structure.type = 'array';
-          }
-        } else {
-          structure.type = typeof value;
-        }
-      }
-      if (valueString) {
-        structure.value = valueString;
-      } else if (value === null) {
-        structure.value = 'null';
-      } else if (typeof value !== 'object') {
-        switch (typeof value) {
-          case 'string':
-            structure.value = '"' + value + '"';
-            break;
-          case 'number':
-            structure.value = value.toString();
-            break;
-          case 'boolean':
-            structure.value = value.toString();
-            break;
-          default:
-            structure.value = '';
-            break;
-        }
-      }
-
-      seenKeys.set(currentKey, structure);
-
-      if (value && typeof value === 'object') {
-        structure.children = parseJsonStructureRecursive(
-          value as Record<string, unknown>,
-          currentKey,
-          seenKeys,
-        );
-      }
-
-      return [structure];
-    });
-  }
-
-  return [];
-}
-
-function convertToRows(structure: KeyStructure[]): string[][] {
-  const rows: string[][] = [];
-  const values: (string | undefined)[] = []; // value들을 따로 저장
-  const types: (string | undefined)[] = []; // type들을 따로 저장
-  function processStructure(items: KeyStructure[]) {
-    items.forEach((item) => {
-      // depth만큼 빈 셀을 만들되, 마지막에 현재 키를 추가
-      const row = new Array(item.depth).fill('').concat(item.key);
-      rows.push(row);
-      values.push(item.value !== undefined ? String(item.value) : undefined);
-      types.push(item.type !== undefined ? String(item.type) : undefined);
-
-      if (item.children) {
-        processStructure(item.children);
-      }
-    });
-  }
-
-  processStructure(structure);
-
-  const maxLength = Math.max(...rows.map((row) => row.length));
-  rows.forEach((row) => {
-    while (row.length < maxLength) {
-      row.push('');
-    }
-  });
-
-  rows.forEach((row, index) => {
-    row.push(values[index] || '');
-    row.push(types[index] || '');
-  });
-
-  return rows;
-}
 
 const Page = () => {
   const { back } = useRouter();
@@ -167,8 +13,8 @@ const Page = () => {
   const handleConvert = () => {
     try {
       const jsonData = JSON.parse(jsonInput);
-      const structure = parseJsonStructureRecursive(jsonData);
-      const rows = convertToRows(structure);
+      const structure = parseJSONToStructureRecursive(jsonData);
+      const rows = structureToRows(structure);
       setCsvRows(rows);
       return rows;
     } catch (error) {
