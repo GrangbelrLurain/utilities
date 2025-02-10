@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ButtonBack from '@/components/presentationals/buttons/button-back';
+import ButtonBack from '@Shared/ui/buttons/ButtonBack';
 import { useRouter } from 'next/router';
 import { FaGithub } from 'react-icons/fa';
 import { BiHomeAlt2 } from 'react-icons/bi';
