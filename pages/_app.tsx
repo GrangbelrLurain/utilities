@@ -1,5 +1,5 @@
 import '@App/styles/globals.css';
-import initMSW from '@App/serviceWorkers/msw';
+import initMSW from '@App/service-workers/msw';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { MainHeader } from '@Features/main-header/ui/MainHeader';

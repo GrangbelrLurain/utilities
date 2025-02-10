@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ObjTextarea from '../../shared/ui/obj-differ/ObjTextarea';
+import ObjTextarea from '@Shared/ui/obj-differ/ObjTextarea';
 import to from 'to-case';
-import ResultStrings from '../../shared/ui/obj-differ/ResultStrings';
+import ResultStrings from '@Shared/ui/obj-differ/ResultStrings';
 import { compareObjKey } from '@Shared/utils/compare/obj-compare';
 
 const CASES = [

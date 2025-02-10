@@ -1,5 +1,5 @@
 import iconv from 'iconv-lite';
-import { TTranslationCodes } from '../structures/translationCodes';
+import { TTranslationCodes } from '@Entities/encode/structures/translationCodes';
 
 export const decode = (code: string, encoding: TTranslationCodes) => {
   try {
