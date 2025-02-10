@@ -76,3 +76,10 @@ url을 json으로 변환합니다.
       <br/>
       <br/>
       로그인 기능 구현 상세
+
+## Directory Style
+- 기본 FSD 방식을 따름(https://feature-sliced.design/docs/get-started/overview#next-steps)
+- 기본 Directory명: "slug"
+- Component명: "pascal"
+  - ex: ThisIsAString
+  - index.tsx로 묶어서 export 하는 경우: Directory명 "pascal"

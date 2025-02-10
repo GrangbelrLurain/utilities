@@ -13,7 +13,14 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@Public/*": ["../public/*"],
+      "@App/*": ["../app/*"],
+      "@Pages/*": ["../pages/*"],
+      "@Widgets/*": ["./src/widgets/*"],
+      "@Features/*": ["./src/features/*"],
+      "@Entities/*": ["./src/entities/*"],
+      "@Shared/*": ["./src/shared/*"]
     },
     "types": ["jest", "@testing-library/jest-dom"],
     "target": "ES2017"
