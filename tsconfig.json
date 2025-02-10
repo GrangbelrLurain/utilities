@@ -12,19 +12,32 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@Public/*": ["../public/*"],
-      "@App/*": ["../app/*"],
-      "@Pages/*": ["../pages/*"],
+      "@Public/*": ["./public/*"],
+      "@App/*": ["./src/app/*"],
+      "@Pages/*": ["./src/pages/*"],
       "@Widgets/*": ["./src/widgets/*"],
       "@Features/*": ["./src/features/*"],
       "@Entities/*": ["./src/entities/*"],
       "@Shared/*": ["./src/shared/*"]
     },
     "types": ["jest", "@testing-library/jest-dom"],
-    "target": "ES2017"
+    "target": "ES2017",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "jest.config.js",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "pages/**/*.tsx",
+    "app/**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }
