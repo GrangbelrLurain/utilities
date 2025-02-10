@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
 const ButtonBack = ({ className, ...props }: ComponentPropsWithoutRef<'button'>) => {
   return (
     <button className={clsx('btn btn-ghost', className)} {...props}>
-      <MdOutlineKeyboardArrowLeft />
+      <MdOutlineKeyboardArrowLeft size={24} />
     </button>
   );
 };
