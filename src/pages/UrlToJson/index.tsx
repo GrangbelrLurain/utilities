@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ObjTextarea from '../../shared/ui/obj-differ/ObjTextarea';
+import ObjTextarea from '@Shared/ui/obj-differ/ObjTextarea';
 import { urlToJson } from '@Shared/utils/text-format/query-format';
-import ResultObj from '../../shared/ui/obj-differ/ResultObj';
+import ResultObj from '@Shared/ui/obj-differ/ResultObj';
 
 const UrlToJsonContainer = () => {
   const [url, setUrl] = useState<string>('');

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ENCODES } from '../constants/translation';
+import { ENCODES } from '@Entities/encode/constants/translation';
 
 export type TTranslationCodes = (typeof ENCODES)[keyof typeof ENCODES][number]['code'];
 

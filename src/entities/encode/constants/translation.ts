@@ -1,4 +1,4 @@
-import { createCodes } from '../../../shared/structures/code';
+import { createCodes } from '@Shared/structures/code';
 
 export const ENCODES = {
   'node.js': createCodes([

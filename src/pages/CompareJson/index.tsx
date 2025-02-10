@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import ObjTextarea from '../../shared/ui/obj-differ/ObjTextarea';
-import ResultStrings from '../../shared/ui/obj-differ/ResultStrings';
+import ObjTextarea from '@Shared/ui/obj-differ/ObjTextarea';
+import ResultStrings from '@Shared/ui/obj-differ/ResultStrings';
 import { compareTwiceObjRecursive } from '@Shared/utils/compare/obj-compare';
 
 const ObjContainer = () => {

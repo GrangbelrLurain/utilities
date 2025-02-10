@@ -1,4 +1,4 @@
-import { ENCODES } from '../constants/translation';
+import { ENCODES } from '@Entities/encode/constants/translation';
 import { decode, encode } from './code-translation';
 
 describe('encode', () => {
