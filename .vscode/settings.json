@@ -7,13 +7,13 @@
   "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
   "prettier.requireConfig": true,
   "commit-message-editor.staticTemplate": [
-    "{type}/{name}/{issueNo}:{subject}",
+    "[{type}/{name}] {issueNo}:{subject}",
     "",
     "{description}",
     ""
   ],
   "commit-message-editor.dynamicTemplate": [
-    "{type}/{name}/{issueNo}:{subject}",
+    "[{type}/{name}] {issueNo}:{subject}",
     "",
     "{description}",
     ""

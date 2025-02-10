@@ -129,14 +129,20 @@ const handleExistingKey = (
 ): JSONStructure[] => {
   const structure = seenMap.get(currentKey);
   if (structure) {
+    const lastValue = structure.value;
     if (typeof value === 'object') {
       structure.children = structure.children || [];
       structure.children.push(...parseJSONToStructureRecursive(value, currentKey, seenMap));
-    } else {
-      structure.value = structure.value + `, ${formatPrimitiveValue(value)}`;
+    } else if ((!lastValue && typeof lastValue === 'object') || lastValue === undefined) {
+      structure.value = lastValue
+        ? lastValue + `, ${formatPrimitiveValue(value)}`
+        : formatPrimitiveValue(value);
     }
     if (!structure.type?.includes(switchType(value))) {
       structure.type = structure.type + `, ${switchType(value)}`;
+      structure.value = lastValue
+        ? lastValue + `, ${formatPrimitiveValue(value)}`
+        : formatPrimitiveValue(value);
     }
   }
 
@@ -156,8 +162,11 @@ const createStructure = (key: string, value: unknown, parentKey: string): JSONSt
 };
 
 const switchType = (value: unknown): string => {
-  if (!value) {
+  if (value === undefined) {
     return '';
+  }
+  if (!value && typeof value === 'object') {
+    return 'null';
   }
   if (Array.isArray(value)) {
     const types = value.reduce((acc, item) => {
