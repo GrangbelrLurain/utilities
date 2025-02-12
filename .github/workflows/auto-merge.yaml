@@ -14,12 +14,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository (Fetch all history)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 전체 히스토리를 가져와서 브랜치 정보를 올바르게 설정
 
       - name: Enable Auto-Merge
         run: |
-          gh pr merge --auto --merge "$(gh pr view --json url -q '.url')"
+          gh pr merge --auto --merge "${{ github.event.pull_request.html_url }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
