@@ -19,7 +19,7 @@ jobs:
 
       - name: Enable Auto-Merge
         run: |
-          gh pr merge --auto --merge "$PR_URL"
+          gh pr merge --auto --merge "$(gh pr view --json url -q '.url')"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
