@@ -33,3 +33,11 @@ export const urlToJson = (url: string): TUrlToJsonReturn => {
     return null;
   }
 };
+
+export const urlToString = (url: string): string => {
+  try {
+    return decodeURIComponent(url);
+  } catch {
+    return '유효하지 않은 URL입니다.';
+  }
+};

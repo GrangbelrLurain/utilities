@@ -33,6 +33,11 @@ export default function Home() {
               url to json
             </Link>
           </li>
+          <li>
+            <Link href="/url/format-string" className="link-hover">
+              url to string
+            </Link>
+          </li>
         </ul>
       </article>
       <h2 className="mx-auto max-w-screen-xl text-xl font-bold w-full">Translation</h2>
