@@ -46,9 +46,6 @@ export const parseJSONToStructureRecursive = (
   seenMap = new Map<string, JSONStructure>(),
 ): JSONStructure[] => {
   if (typeof structureValue === 'object' && structureValue !== null) {
-    if (Array.isArray(structureValue)) {
-      return setArrayStructure(structureValue as unknown[], parentKey, seenMap);
-    }
     return setObjectStructure(structureValue as Record<string, unknown>, parentKey, seenMap);
   }
 
@@ -67,30 +64,6 @@ const arrayToString = (array: unknown[]): string => {
       return formatPrimitiveValue(item);
     })
     .join(', ')}]`;
-};
-
-const setArrayStructure = (
-  array: unknown[],
-  parentKey: string,
-  seenMap: Map<string, JSONStructure>,
-): JSONStructure[] => {
-  const currentKey = parentKey ? `${parentKey}${KEY_SEPARATOR}${KEY_ARRAY}` : KEY_ARRAY;
-  if (seenMap.has(currentKey)) {
-    return handleExistingKey(currentKey, array, seenMap);
-  }
-
-  const structure = createStructure(KEY_ARRAY, array, parentKey);
-  seenMap.set(currentKey, structure);
-  structure.children = structure.children || [];
-
-  array.forEach((value) => {
-    if (value && typeof value === 'object') {
-      const childResults = parseJSONToStructureRecursive(value, currentKey, seenMap);
-      structure.children!.push(...(childResults || []));
-    }
-  });
-
-  return [structure];
 };
 
 const setObjectStructure = (
