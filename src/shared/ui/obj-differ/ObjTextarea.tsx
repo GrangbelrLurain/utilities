@@ -1,4 +1,4 @@
-import { formatObjectLiteral } from '@Shared/utils/text-format/obj-format';
+import { safelyParseJsonArray } from '@Shared/utils/text-format/obj-format';
 import clsx from 'clsx';
 import { ComponentPropsWithoutRef, useEffect, useRef } from 'react';
 
@@ -22,7 +22,7 @@ const ObjTextarea = ({ defaultValue, value, className, onChange, ...props }: TOb
       if (!value?.trim()) return;
 
       try {
-        const formattedValue = formatObjectLiteral(value);
+        const formattedValue = safelyParseJsonArray(value);
 
         if (objTextareaRef.current) {
           objTextareaRef.current.value = formattedValue;
