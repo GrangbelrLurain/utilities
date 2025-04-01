@@ -589,3 +589,18 @@ export const MatrixToCsv = (matrix: string[][]): string => {
     )
     .join('\n');
 };
+
+export const CsvToMatrix = (csv: string): string[][] => {
+  return csv.split('\n').map((row) => row.split(',').flatMap((cell) => cell.split('\t')));
+};
+
+export const MatrixToJson = (matrix: string[][]): Record<string, unknown>[] => {
+  const headers = matrix[0];
+  return matrix.slice(1).map((row) => {
+    const obj: Record<string, unknown> = {};
+    row.forEach((cell, index) => {
+      obj[headers[index]] = cell;
+    });
+    return obj;
+  });
+};
