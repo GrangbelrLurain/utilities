@@ -46,11 +46,14 @@ url을 json으로 변환합니다.
 인코딩된 문자열을 디코딩합니다.
 
 ## 작업자
+
 - kim
 - shin
 
 ## Commit & Branch Pattern
+
 ### type
+
 - feat(기능 개발)
 - hotfix(버그 수정)
 - docs(문서 관련 수정)
@@ -62,22 +65,24 @@ url을 json으로 변환합니다.
 - revert(원복)
 - test(테스트)
 
-
 ### Branch Name
+
 - type/name/#issueNo
 - ex: feat/john/#123
 
 ### Commit Message
+
 - [type/name] subject
-    <br/>
-    <br/>
-    markdown
+  <br/>
+  <br/>
+  markdown
 - ex: [feat/john] 로그인 기능 구현
-      <br/>
-      <br/>
-      로그인 기능 구현 상세
+  <br/>
+  <br/>
+  로그인 기능 구현 상세
 
 ## Directory Style
+
 - 기본 FSD 방식을 따름(https://feature-sliced.design/docs/get-started/overview#next-steps)
 - 기본 Directory명: "slug"
 - Component명: "pascal"
