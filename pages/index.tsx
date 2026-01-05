@@ -65,6 +65,16 @@ export default function Home() {
           </li>
         </ul>
       </article>
+      <h2 className="mx-auto max-w-screen-xl text-xl font-bold w-full">TypeScript</h2>
+      <article className="mx-auto max-w-screen-xl w-full">
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link href="/ts/openapi-to-ts" className="link-hover">
+              OpenAPI to TypeScript
+            </Link>
+          </li>
+        </ul>
+      </article>
     </section>
   );
 }
